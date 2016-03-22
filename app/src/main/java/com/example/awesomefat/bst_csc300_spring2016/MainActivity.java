@@ -15,11 +15,14 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         BST tree = new BST();
-        Random r = new Random();
-        for(int i = 0; i < 10; i++)
+        String vals = "fbadcegih";
+        for(int i = 0; i < vals.length(); i++)
         {
-            tree.add(r.nextInt(100));
+            tree.add(vals.charAt(i));
         }
-        tree.display();
+        tree.visitPreOrder();
+        tree.visitPostOrder();
+        tree.visitInOrder();
+        tree.visitLevelOrder();
     }
 }
