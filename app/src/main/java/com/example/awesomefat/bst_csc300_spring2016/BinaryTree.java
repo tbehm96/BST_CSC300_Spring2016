@@ -16,6 +16,47 @@ public class BinaryTree
         this.rightTree = null;
     }
 
+    public boolean isOutOfBalance()
+    {
+        int leftDepth = this.leftTree == null?0:this.leftTree.depth();
+        int rightDepth = this.rightTree == null?0:this.rightTree.depth();
+        return Math.abs(leftDepth-rightDepth) > 1;
+    }
+
+    public String outOfBalanceSecondarily(char val)
+    {
+
+        if(this.payload == val && this.leftTree == null)
+        {
+
+            return BSTCore.lastTurn;
+        }
+        else
+        {
+
+            if(this.leftTree != null)
+            {
+                BSTCore.lastTurn = "left";
+                this.leftTree.outOfBalanceSecondarily(val);
+            }
+            if(this.rightTree != null)
+            {
+                BSTCore.lastTurn = "right";
+                this.rightTree.outOfBalanceSecondarily(val);
+            }
+        }
+
+        return BSTCore.lastTurn;
+    }
+
+
+    public int depth()
+    {
+
+        return 1 + Math.max((this.leftTree == null?0:this.leftTree.depth()),
+                (this.rightTree == null?0:this.rightTree.depth()));
+    }
+
     public void add(char payload)
     {
         if(payload <= this.payload)

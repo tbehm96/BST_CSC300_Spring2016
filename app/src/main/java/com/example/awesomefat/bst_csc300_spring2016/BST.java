@@ -14,6 +14,28 @@ public class BST
         this.root = null;
     }
 
+    public boolean isOutOfBalance()
+    {
+        //boolean-exp?true-stmt:false-stmt
+        return this.root.isOutOfBalance();
+    }
+
+    public void howAreWeOutOfBalance(char val)
+    {
+        //where are we out of balance initially? left or right?
+        String outOfBalanceInitial = "right";
+        if(val <= this.root.getPayload())
+        {
+            outOfBalanceInitial = "left";
+        }
+
+        //where are we out of balance secondarily? left or right?
+        String outOfBalanceSecondarily = this.root.outOfBalanceSecondarily(val);
+        System.out.println("Initial: " + outOfBalanceInitial + " Secondarily: " + outOfBalanceSecondarily);
+
+        //Finaly print out how we are out of balance
+    }
+
     public void add(char payload)
     {
         if(this.root == null)
@@ -42,27 +64,27 @@ public class BST
         {
             childStack.push(this.root);
             while(!childStack.isEmpty() || !tempStack.isEmpty())
-            { //System.out.println("A");
+            {
                 //clear child stack by adding its children to tempStack and then popping
-                if (childStack.peek().getLeftTree() != null)
-                    tempStack.push(childStack.peek().getLeftTree());
-                if (childStack.peek().getRightTree() != null)
-                    tempStack.push(childStack.peek().getRightTree());
-                childStack.pop();
                 while(!childStack.isEmpty())
-                { //System.out.println("B");
+                {
                     //push the left and right children of peek childStack onto tempStack
-                    //pop from childStack and push onto contentStack
-                    if (childStack.peek().getLeftTree() != null)
+                    if(childStack.peek().getLeftTree() != null)
+                    {
                         tempStack.push(childStack.peek().getLeftTree());
-                    if (childStack.peek().getRightTree() != null)
+                    }
+                    if(childStack.peek().getRightTree() != null)
+                    {
                         tempStack.push(childStack.peek().getRightTree());
+                    }
+
+                    //pop from childStack and push onto contentStack
                     contentStack.push(childStack.pop());
                 }
 
                 //move contents of tempStack onto childStack in REVERSE
                 while(!tempStack.isEmpty())
-                { //System.out.println("C");
+                {
                     //pop -> push onto childStack
                     childStack.push(tempStack.pop());
                 }
@@ -71,19 +93,19 @@ public class BST
             //we now know that child and temp stacks are empty and all of our
             //nodes are in contentStack in REVERSE order, so we need to reverse them again
             while(!contentStack.isEmpty())
-            { //System.out.println("D");
+            {
                 //pop -> push onto answerStack
                 answerStack.push(contentStack.pop());
             }
 
             //our final answer is answerStack, we can visit the nodes in pop order
-            System.out.println("**** Level Order Display ****");
+            String answer = "";
             while(!answerStack.isEmpty())
             {
                 //pop and display value
-                System.out.println(answerStack.pop().getPayload());
+                answer += answerStack.pop().getPayload() + "\t";
             }
-            System.out.println("**** Level Order Display End ****");
+            System.out.println(answer);
         }
     }
 
