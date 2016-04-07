@@ -1,6 +1,9 @@
-package com.example.awesomefat.bst_csc300_spring2016;
-
 public class BSTCore
 {
-    static String lastTurn;
+    static BST theTree = null;
+    static BinaryTree culprit = null;
+    static BinaryTree pivot = null;
+    static BinaryTree parent = null;
+    static BinaryTree grandParent = null;
+    static String outOfBalance = "";
 }

@@ -1,10 +1,5 @@
-package com.example.awesomefat.bst_csc300_spring2016;
-
 import java.util.Stack;
 
-/**
- * Created by awesomefat on 3/3/16.
- */
 public class BST
 {
     private BinaryTree root;
@@ -12,6 +7,7 @@ public class BST
     public BST()
     {
         this.root = null;
+        BSTCore.theTree = this;
     }
 
     public boolean isOutOfBalance()
@@ -20,20 +16,57 @@ public class BST
         return this.root.isOutOfBalance();
     }
 
-    public void howAreWeOutOfBalance(char val)
+    public String howAreWeOutOfBalance(char val)
     {
         //where are we out of balance initially? left or right?
-        String outOfBalanceInitial = "right";
         if(val <= this.root.getPayload())
         {
-            outOfBalanceInitial = "left";
+            BSTCore.outOfBalance = "left";
+        }
+        else
+        {
+            BSTCore.outOfBalance = "right";
         }
 
         //where are we out of balance secondarily? left or right?
-        String outOfBalanceSecondarily = this.root.outOfBalanceSecondarily(val);
-        System.out.println("Initial: " + outOfBalanceInitial + " Secondarily: " + outOfBalanceSecondarily);
+        BSTCore.outOfBalance += " - " + this.root.outOfBalanceSecondarily(val, "DEFAULT TURN");
 
         //Finaly print out how we are out of balance
+        return BSTCore.outOfBalance;
+    }
+
+    public void rebalance()
+    {
+        //assuming we are out of balance left-left
+        if(this.howAreWeOutOfBalance(BSTCore.culprit.getPayload()).equals("left - left"))
+        {
+            if(BSTCore.grandParent != null)
+            {
+                BSTCore.grandParent.setLeftTree(BSTCore.pivot);
+            }
+            else
+            {
+                BSTCore.theTree.root = BSTCore.pivot;
+            }
+            BSTCore.parent.setLeftTree(null);
+            BSTCore.pivot.add(BSTCore.parent);
+        }
+        else
+        {
+            if(this.howAreWeOutOfBalance(BSTCore.culprit.getPayload()).equals("right - right"))
+            {
+                if(BSTCore.grandParent != null)
+                {
+                    BSTCore.grandParent.setRightTree(BSTCore.pivot);
+                }
+                else
+                {
+                    BSTCore.theTree.root = BSTCore.pivot;
+                }
+                BSTCore.parent.setRightTree(null);
+                BSTCore.pivot.add(BSTCore.parent);
+            }
+        }
     }
 
     public void add(char payload)
@@ -41,6 +74,7 @@ public class BST
         if(this.root == null)
         {
             this.root = new BinaryTree(payload);
+            BSTCore.culprit = this.root;
         }
         else
         {
